@@ -1,0 +1,53 @@
+{
+  "objects": [
+    {
+      "id": "MySchedule",
+      "type": "Schedule",
+      "startDateTime": "2013-08-18T00:00:00",
+      "endDateTime": "2013-08-19T00:00:00",
+      "period": "1 day"
+    },
+    {
+      "id": "S3Input",
+      "type": "S3DataNode",
+      "schedule": {
+        "ref": "MySchedule"
+      },
+      "filePath": "s3://example-bucket/source/inputfile.csv"
+    },
+    {
+      "id": "S3Output",
+      "type": "S3DataNode",
+      "schedule": {
+        "ref": "MySchedule"
+      },
+      "filePath": "s3://example-bucket/destination/outputfile.csv"
+    },
+    {
+      "id": "MyEC2Resource",
+      "type": "Ec2Resource",
+      "schedule": {
+        "ref": "MySchedule"
+      },
+      "instanceType": "m1.medium",
+      "role": "DataPipelineDefaultRole",
+      "resourceRole": "DataPipelineDefaultResourceRole"
+    },
+    {
+      "id": "MyCopyActivity",
+      "type": "CopyActivity",
+      "runsOn": {
+        "ref": "MyEC2Resource"
+      },
+      "input": {
+        "ref": "S3Input"
+      },
+      "output": {
+        "ref": "S3Output"
+      },
+      "schedule": {
+        "ref": "MySchedule"
+      }
+    }
+  ]
+}

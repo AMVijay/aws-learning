@@ -1,0 +1,124 @@
+{
+  "objects": [
+    {
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "scheduleType": "ONDEMAND",
+      "name": "Default",
+      "id": "Default",
+      "myComment": "This object is used to set default configuration for objects in the pipeline"
+    },
+    {
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "instanceType": "t2.nano",
+      "name": "Ec2Instance",
+      "securityGroups": "#{myEc2RdsSecurityGrps}",
+      "id": "Ec2Instance",
+      "type": "Ec2Resource",
+      "myComment": "This object is used to create an Amazon EC2 Instance that activities in the pipeline can run on.",
+      "terminateAfter": "2 Hours"
+    },
+    {
+      "output": {
+        "ref": "S3OutputLocation"
+      },
+      "input": {
+        "ref": "SourceRDSTable"
+      },
+      "name": "RDStoS3CopyActivity",
+      "runsOn": {
+        "ref": "Ec2Instance"
+      },
+      "id": "RDStoS3CopyActivity",
+      "myComment": "This object is a CopyActivity. It is used to define the work that will be done to copy the data from the database to S3.",
+      "type": "CopyActivity"
+    },
+    {
+      "input": {
+        "ref": "S3OutputLocation"
+      },
+      "dependsOn": {
+        "ref": "RDStoS3CopyActivity"
+      },
+      "name": "invokeOnPremiseSyncActivity",
+      "id": "ShellCommandActivityId_oOibH",
+      "runsOn": {
+        "ref": "Ec2Instance"
+      },
+      "type": "ShellCommandActivity",
+      "command": "aws lambda  --region #{myRegion} invoke --function-name #{myLambdaFunction} #{myOutputS3Path}"
+    },
+    {
+      "connectionString": "#{myRDSConnectStr}",
+      "*password": "#{*myRDSPassword}",
+      "name": "SourceRDSTable",
+      "id": "SourceRDSTable",
+      "type": "MySqlDataNode",
+      "myComment": "This object is a mysql datanode. It is used to represent the database which is the input datanode.",
+      "table": "#{myRDSTableName}",
+      "selectQuery": "select * from #{table}",
+      "username": "#{myRDSUsername}"
+    },
+    {
+      "directoryPath": "#{myOutputS3Path}",
+      "name": "S3OutputLocation",
+      "id": "S3OutputLocation",
+      "type": "S3DataNode",
+      "myComment": "This object is a S3 datanode. It is used to represent the S3 directory where the data will be stored."
+    }
+  ],
+  "parameters": [
+    {
+      "description": "RDS MySQL password",
+      "id": "*myRDSPassword",
+      "type": "String"
+    },
+    {
+      "description": "RDS MySQL table name",
+      "id": "myRDSTableName",
+      "type": "String"
+    },
+    {
+      "watermark": "sg-12345",
+      "description": "RDS MySQL security group(s)",
+      "isArray": "true",
+      "optional": "true",
+      "id": "myEc2RdsSecurityGrps",
+      "type": "String"
+    },
+    {
+      "description": "RDS MySQL username",
+      "id": "myRDSUsername",
+      "type": "String"
+    },
+    {
+      "watermark": "s3://mybucket",
+      "description": "S3 folder for logs",
+      "id": "myS3LogsPath",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "watermark": "s3://mybucket",
+      "description": "Output S3 folder",
+      "id": "myOutputS3Path",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "watermark": "jdbc:mysql://connectionstring:3306/dbname",
+      "description": "RDS MySQL connection string",
+      "id": "myRDSConnectStr",
+      "type": "String"
+    }
+  ],
+  "values": {
+    "myRDSUsername": "test",
+    "myS3LogsPath": "s3://mybucket/logs/",
+    "myRDSConnectStr": "jdbc:mysql://connectionstring:3306/dbname",
+    "*myRDSPassword": "test",
+    "myOutputS3Path": "s3://mybucket/output/#{format(@scheduledStartTime, 'YYYY-MM-dd-HH-mm-ss')}",
+    "myLambdaFunction": "invokeOnPremiseSyncService",
+    "myRegion": "virgenia",
+    "myRDSTableName": "test"
+  }
+}

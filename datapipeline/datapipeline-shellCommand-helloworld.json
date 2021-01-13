@@ -1,0 +1,29 @@
+{
+  "objects": [
+    {
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "scheduleType": "ONDEMAND",
+      "name": "Default",
+      "id": "Default"
+    },
+    {
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "name": "TestResource",
+      "id": "ResourceId_ZjUQn",
+      "type": "Ec2Resource",
+      "terminateAfter": "2 Minutes"
+    },
+    {
+      "name": "TestShellCommandActivity",
+      "runsOn": {
+        "ref": "ResourceId_ZjUQn"
+      },
+      "id": "ShellCommandActivityId_ELzDd",
+      "type": "ShellCommandActivity",
+      "command": "echo 'Hello, World'"
+    }
+  ],
+  "parameters": []
+}
