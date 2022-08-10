@@ -3,9 +3,15 @@
 Virtual Private Cloud provides the feature to create our own private cloud network.
 
 ## VPC Features 
+* [VPC Subnets](#vpc-subnets)
 * [VPC Peering](#vpc-peering)
 * [VPC Endpoints](#vpc-endpoints)
 
+
+### VPC Subnets
+* VPC Subnet is a logical separation of group of IP address inside private cloud IP range.
+* VPC Subnet can be Public subnet or Private Subnet.
+* A VPC can have 0 or more Public subnets and 0 or more Private subnets. But must need to have either one of Public or Private subnet. 
 
 ### VPC Peering 
 * VPC Peering allows to connect 2 VPCs
