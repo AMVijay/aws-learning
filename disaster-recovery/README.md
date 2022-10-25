@@ -1,5 +1,6 @@
 # Disaster Recovery Solution Design
 
+## Objective
 Disaster Recovery Design depends on two main parameters RPO and RTO. 
 RPO stands for Recovery Point Objective, It defines how much old data should be recovered during Disaster Recovery.
 * Example 1: If RPO is 10 mins, then DR design should not loose data older than 10 mins during recovery process and continue to run. 
