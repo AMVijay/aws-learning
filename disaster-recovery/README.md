@@ -1,7 +1,7 @@
 # Disaster Recovery Solution Design
 
 ## Objective
-Disaster Recovery Design depends on two main parameters RPO and RTO. 
+Disaster Recovery Design depends on two main parameters RPO and RTO.   
 RPO stands for Recovery Point Objective, It defines how much old data should be recovered during Disaster Recovery.
 * Example 1: If RPO is 10 mins, then DR design should not loose data older than 10 mins during recovery process and continue to run. 
 * Exmaple 2: If RPO is 4 hrs, then DR design should not loose older than 4 hrs of business data during recovery process and back to continue to run.
@@ -16,7 +16,13 @@ RTO stands for Recovery Time Objective. It defines how much time will be taken t
 * Option 3 - Active / Passive Concept - Keep services also up but with reduced capacity.
 * Option 4 - Active / Active
 
-# Option 4 - Active/Active - Solution Design
+### Option 4 - Active/Active - Solution Design
+Below solution design is one example for Active/Active Strategy.  
+
+![](./disaster-recover-design.jpg)
+
+Important items in this design is
+
 
 
 
