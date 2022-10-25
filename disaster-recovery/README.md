@@ -19,7 +19,7 @@ RTO stands for Recovery Time Objective. It defines how much time will be taken t
 ### Option 4 - Active/Active - Solution Design
 Below solution design is one example for Active/Active Strategy.  
 
-![](./disaster-recover-design.jpg)
+![](disaster-recover-design.jpg)
 
 Important items in this design is
 
