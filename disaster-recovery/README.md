@@ -19,7 +19,7 @@ RTO stands for Recovery Time Objective. It defines how much time will be taken t
 ### Option 4 - Active/Active - Solution Design
 Below solution design is one example for Active/Active Strategy.  
 
-![Disaster Recovery Design](https://raw.githubusercontent.com/AMVijay/aws-learning/main/disaster-recovery/disaster-recover-design.jpg)
+![disaster-recover-design](https://user-images.githubusercontent.com/8252947/197955933-81c1d06d-439b-46d4-bf40-a46255c7eb84.jpg)
 
 **Design Summary:**
 * Important items in this design are CloudFront and DynamodB. Rest of all other services are mirrored in DR region as same as Prod region.
