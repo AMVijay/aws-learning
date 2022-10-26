@@ -29,9 +29,9 @@ Below is an example solution design for Active/Active Strategy.
     * To achieve this, need to configure DynamoDB tables as Global Tables to sync with other region.     
 
 ### Option 3 - Active / Passive - Solution Design
-
 Below is an example design with active - passive strategy. 
 
+![disaster-recovery-design-active-passive](https://user-images.githubusercontent.com/8252947/198069123-ce3660bf-1d20-4671-9270-6e5c7105fc28.jpg)
 
 **Design Summary:**
 
