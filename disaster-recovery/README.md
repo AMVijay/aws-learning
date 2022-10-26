@@ -17,7 +17,7 @@ RTO stands for Recovery Time Objective. It defines how much time will be taken t
 * Option 4 - Active / Active
 
 ### Option 4 - Active/Active - Solution Design
-Below solution design is one example for Active/Active Strategy.  
+Below is an example solution design for Active/Active Strategy.  
 
 ![disaster-recover-design](https://user-images.githubusercontent.com/8252947/197955933-81c1d06d-439b-46d4-bf40-a46255c7eb84.jpg)
 
@@ -26,4 +26,12 @@ Below solution design is one example for Active/Active Strategy.
 * **CloudFront** - It needs to route the requests to both region as Active as Active. 
     * To achieve this, CloudFront Origin configuration would have both region API Gateways by grouping them in Origin Group.
 * **DynamoDB** - It needs to sync both region data without any miss. 
-    * To achieve this, need to configure DynamoDB tables Global Tables.     
+    * To achieve this, need to configure DynamoDB tables as Global Tables to sync with other region.     
+
+### Option 3 - Active / Passive - Solution Design
+
+Below is an example design with active - passive strategy. 
+
+
+**Design Summary:**
+
