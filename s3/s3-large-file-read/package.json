@@ -4,7 +4,7 @@
   "description": "## Project Set Commands * npm init *",
   "main": "index.js",
   "scripts": {
-    "build": "npx rimraf .dist && npx mkdirp ./dist && npx ts-node ./src/index.ts",
+    "build": "npx rimraf .dist && npx mkdirp ./dist && npx webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "VIJAYaraaghavan Manoharan",
@@ -12,7 +12,10 @@
   "devDependencies": {
     "mkdirp": "^2.1.6",
     "rimraf": "^4.4.1",
+    "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1"
   }
 }
