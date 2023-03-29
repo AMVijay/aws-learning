@@ -1,0 +1,18 @@
+{
+  "name": "s3-large-file-read",
+  "version": "1.0.0",
+  "description": "## Project Set Commands * npm init *",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx rimraf .dist && npx mkdirp ./dist && npx ts-node ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "VIJAYaraaghavan Manoharan",
+  "license": "ISC",
+  "devDependencies": {
+    "mkdirp": "^2.1.6",
+    "rimraf": "^4.4.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
+  }
+}
