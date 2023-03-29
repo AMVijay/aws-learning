@@ -1,4 +1,4 @@
-const handler = async(event) => {
+const handler = async(event: any) => {
     console.log("Hello, World");
 } 
 
