@@ -5,7 +5,7 @@ const webpackConfiguration: Configuration = {
     mode: "production",
     entry: "./src/index.ts",
     output: {
-        filename: "index.js",
+        // filename: "index.js",
         path: resolve(__dirname, 'dist'),
         library: {
             type: "commonjs2"

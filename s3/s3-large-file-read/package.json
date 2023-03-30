@@ -4,7 +4,7 @@
   "description": "## Project Set Commands * npm init *",
   "main": "index.js",
   "scripts": {
-    "build": "npx rimraf ./dist && npx mkdirp ./dist && npx webpack",
+    "build": "npx rimraf ./dist && npx mkdirp ./dist && npx webpack && zip -rq lambda.zip dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "VIJAYaraaghavan Manoharan",
