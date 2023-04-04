@@ -6,8 +6,8 @@ export const handler = async(event: any) => {
     console.log("Hello, World");
 
     const getObjectCommand = new GetObjectCommand({
-        Bucket: "",
-        Key: ""
+        Bucket: process.env.BUCKET_NAME,
+        Key: process.env.FILE_NAME
     });
 
     try{

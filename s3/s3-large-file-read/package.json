@@ -11,6 +11,7 @@
   "author": "VIJAYaraaghavan Manoharan",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^18.15.11",
     "mkdirp": "^2.1.6",
     "rimraf": "^4.4.1",
     "typescript": "^5.0.2"
