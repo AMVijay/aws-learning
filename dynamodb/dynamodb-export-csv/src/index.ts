@@ -17,9 +17,19 @@ export const handler = async () => {
         });
 
         const result = await ddbClient.send(queryCommand);
+        let csv = "";
+        let header = false;
         result.Items?.forEach(element => {
-            console.log("element", unmarshall(element));
+            if(!header){
+                csv = Object.keys(unmarshall(element)).join(",");
+                csv += "\n";
+                header = true;
+            }
+            csv += Object.values(unmarshall(element)).join(",");
+            csv += "\n";
         });
+        console.log("CSV Content", csv);
+        
 
     } catch (error) {
         console.error("Error in DynamoDB Query", error);
