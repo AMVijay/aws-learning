@@ -7,9 +7,9 @@ export const handler = async() => {
         const ddbClient = new DynamoDBClient({region: "US-WEST-2"});
 
         const queryCommand = new QueryCommand({
-            TableName: "",
-            IndexName: "",
-            KeyConditionExpression: ""
+            TableName: process.env.TABLE_NAME,
+            IndexName: process.env.INDEX_NAME,
+            KeyConditionExpression: process.env.KEY_CONDITION
         });
 
         const result = await ddbClient.send(queryCommand);
