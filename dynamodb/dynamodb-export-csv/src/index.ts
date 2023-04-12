@@ -16,9 +16,10 @@ export const handler = async() => {
         result.Items?.forEach(element => {
             console.log("element", element);
         });
+       
     } catch(error){
         console.error("Error in DynamoDB Query", error);
     }
 
-
+    console.log("Completed process");
 }
