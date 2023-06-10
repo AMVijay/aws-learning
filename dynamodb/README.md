@@ -3,7 +3,8 @@
 ## Introduction
 * DynamoDB is a NoSQL database.
 * DynamoDB is defined as Table -> collection of Items -> collection of Attributes.
-* DynamoDB attribute datatypes are Number, String, Boolean, List, Map, Set.
+* DynamoDB attribute datatypes are Number, String, Boolean.
+    * **TODO** - Need to check List, Map, Set.
 * Max size of each item can be 400 KB.
 
 ## Indexes in DynamoDB
