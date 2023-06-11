@@ -7,14 +7,20 @@
     * **TODO** - Need to check List, Map, Set.
 * Max size of each item can be 400 KB.
 
-## Indexes in DynamoDB
+## Partition Key and Sort Key in DynamoDB
 * Partition Key
+    * It is the primary key for the table. By definition, primary key attribute should be unique. 
     * It is mandatory to create table.
-    * It is an attribute in the table and its value should be unique.
-    * DynamoDB uses this partition key as hash value to retrive the item from the storage nodes. This helps DynamoDB scalability. 
+    * This partition key is stored as hash value. 
+    * It is used in data retrival from storage nodes.  
+* Sort Key
+    * Sort Key is defined from another attribute present in all items apart from partition key.
+    * Partition Key + Sort Key together makes composite key.
+    * It enables a partition to store more than one item in order.
 
-* Each table must have One Partition Key. Partition Key is one of the attribute from the table and that should be unique. 
-* Partition Key can have a sort key from the table .
+## Index Concepts
+* DynamoDB allows to define Secondary Indexes which help to define more composite keys apart from Primary Partition Key and Sort Key.
+* Two types secondary index are provided.    
 
 ## Capacity of DynamoDB
 * RCU - Read Capacity Units
