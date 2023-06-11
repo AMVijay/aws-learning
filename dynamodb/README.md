@@ -20,11 +20,20 @@
 
 ## Index Concepts
 * DynamoDB allows to define Secondary Indexes which help to define more composite keys apart from Primary Partition Key and Sort Key.
-* Two types secondary index are provided.    
+* Two types secondary index are available in DynamoDB. 
+    1. Local Secondary Index - Adding new sort Key to the Primary Partition Key.
+    2. Global Secondary Index - Creating new Partition Key (mandatory) + Sort Key.
 
 ## Capacity of DynamoDB
-* RCU - Read Capacity Units
-* WCU - Write Capacity Units
+* DynamoDB capacity is separated by Read and Write. Read capacity is defined using RCU - Read Capacity Units. Write Capacity is defined using WCU - Write Capacity Units. 
+* RCU and WCU can be changed independent of other one based on need.
+* Both RCU and WCU can be defined 
+    * Provisioned - Allocating the defined compute units always. 
+    * On-Demand - Pay per use concept.
+* Provisioned Configuration has Auto Scaling option available. It allows to configure the minimum capacity units, max capacity units and the condition to auto scale from minimum to maximum.
+
+## Export and Backup
+* By enabling the PITR (Point InTime Recovery), table content can be exported to S3 Bucket. Export Content will be in DynamoDB JSON format. 
 
 ## Create Table using AWS CLI
 * `aws dynamodb create-table`
