@@ -8,6 +8,11 @@
 * Max size of each item can be 400 KB.
 
 ## Indexes in DynamoDB
+* Partition Key
+    * It is mandatory to create table.
+    * It is an attribute in the table and its value should be unique.
+    * DynamoDB uses this partition key as hash value to retrive the item from the storage nodes. This helps DynamoDB scalability. 
+
 * Each table must have One Partition Key. Partition Key is one of the attribute from the table and that should be unique. 
 * Partition Key can have a sort key from the table .
 
