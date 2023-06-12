@@ -33,7 +33,10 @@
 * Provisioned Configuration has Auto Scaling option available. It allows to configure the minimum capacity units, max capacity units and the condition to auto scale from minimum to maximum.
 
 ## Export and Backup
-* By enabling the PITR (Point InTime Recovery), table content can be exported to S3 Bucket. Export Content will be in DynamoDB JSON format. 
+* By enabling the PITR (Point InTime Recovery), table content can be exported to S3 Bucket as Backup. 
+    * Except S3 storage cost, there won't be additional cost as PITR doesn't use RCU and WCU.
+
+ 
 
 ## Create Table using AWS CLI
 * `aws dynamodb create-table`
