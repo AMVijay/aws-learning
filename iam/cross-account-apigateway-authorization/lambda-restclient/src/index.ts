@@ -2,35 +2,46 @@
  * @author VIJAYaraaghavan Manoharan
  */
 
-import { RequestOptions, request } from 'https';
+import https, { RequestOptions } from 'https';
 
 export const handler = async () => {
     console.log("Hello, World");
-    console.log("Endpoint value is ", process.env.ENDPOINT);
 
     const url: string = process.env.ENDPOINT as string;
 
-    // Setting the configuration for
-    // the request
+    console.log("Endpoint value is ", url);
+
     const options: RequestOptions = {
-        method: 'GET'
-    };
+        method: "GET",
+        headers: {
+            "Content-Type": 'application/json'
+        }
+    }
 
     // Sending the request
-    const req = request(url, options, (res) => {
-        let data = ''
+    const response = await new Promise((resolve, reject) => {
 
-        res.on('data', (chunk) => {
-            data += chunk;
-        });
+        https.request(url, options, (res) => {
+            console.log("sent request");
+            let data = ''
 
-        // Ending the response 
-        res.on('end', () => {
-            console.log('Body:', JSON.parse(data))
-        });
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
 
-    }).on("error", (err) => {
-        console.log("Error: ", err)
-    }).end()
+            // Ending the response 
+            res.on('end', () => {
+                console.log('Body:', data)
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: ", err)
+        }).end()
+
+    });
+
+
+
+    console.log("Request completed");
 
 }
