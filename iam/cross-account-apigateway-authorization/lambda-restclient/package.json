@@ -1,0 +1,19 @@
+{
+  "name": "lambda-restclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx rimraf ./dist lambda.zip && npx mkdirp ./dist && npx tsc && zip -rq lambda.zip node_modules dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "VIJAYaraaghavan Manoharan",
+  "license": "ISC",
+  "devDependencies": {
+    "mkdirp": "^3.0.1",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3",
+    "zip": "^1.2.0"
+  }
+}
