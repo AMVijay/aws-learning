@@ -5,7 +5,17 @@
 import https, { RequestOptions } from 'https';
 
 export const handler = async () => {
-    console.log("Hello, World");
+    console.log("async handler started");
+    const response = await getRestAPIResponse();
+    console.log("API Response value ", response);
+    console.log("async handler stopped");
+    return response;
+}
+
+/**
+ * Method to invoke RESTAPI and get response.
+ */
+async function getRestAPIResponse(){
 
     const url: string = process.env.ENDPOINT as string;
 
@@ -19,7 +29,7 @@ export const handler = async () => {
     }
 
     // Sending the request
-    const response = await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
         https.request(url, options, (res) => {
             console.log("sent request");
@@ -31,7 +41,7 @@ export const handler = async () => {
 
             // Ending the response 
             res.on('end', () => {
-                console.log('Body:', data)
+                console.log('Body:', data);
             });
 
         }).on("error", (err) => {
@@ -39,9 +49,5 @@ export const handler = async () => {
         }).end()
 
     });
-
-
-
-    console.log("Request completed");
 
 }
