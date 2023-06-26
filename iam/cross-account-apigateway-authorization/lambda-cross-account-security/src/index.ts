@@ -6,13 +6,15 @@ import https, { RequestOptions } from 'https';
 import { AssumeRoleCommand, Credentials, STSClient } from '@aws-sdk/client-sts';
 import { SignatureV4 } from '@aws-sdk/signature-v4';
 import { Sha256 } from '@aws-crypto/sha256-js';
+import { HttpRequest } from '@aws-sdk/types';
 
 export const handler = async () => {
     console.log("async handler started");
     const stsResponse = await getStsData();
     console.log("handler > STS Response ", stsResponse);
-    await getSignedRequest(stsResponse?.Credentials as Credentials);
-    const response = await getRestAPIResponse();
+    const signedRequest = await getSignedRequest(stsResponse?.Credentials as Credentials);
+    console.log("handler > SignedRequestData ", signedRequest);
+    const response = await getRestAPIResponse(signedRequest);
     console.log("handler > API Response value ", response);
     console.log("async handler stopped");
     return response;
@@ -21,7 +23,7 @@ export const handler = async () => {
 /**
  * Method to invoke RESTAPI and get response.
  */
-function getRestAPIResponse() {
+function getRestAPIResponse(signedRequestData: HttpRequest) {
 
     const url: string = process.env.ENDPOINT as string;
 
@@ -37,7 +39,7 @@ function getRestAPIResponse() {
     // Sending the request
     return new Promise((resolve, reject) => {
 
-        https.request(url, options, (res) => {
+        https.request(url, signedRequestData, (res) => {
             console.log("sent request");
             let data = ''
 
@@ -79,7 +81,7 @@ async function getStsData() {
 }
 async function getSignedRequest(credentials: Credentials) {
 
-    const signv4 = new SignatureV4({
+    const sigv4 = new SignatureV4({
         service: 'execute-api',
         region: 'us-west-2',
         credentials: {
@@ -89,6 +91,20 @@ async function getSignedRequest(credentials: Credentials) {
         },
         sha256: Sha256
     });
+
+    const apiUrl = new URL(process.env.ENDPOINT as string)
+
+    const signed = await sigv4.sign({
+        method: 'GET',
+        hostname: apiUrl.host,
+        path: apiUrl.pathname,
+        protocol: apiUrl.protocol,
+        headers: {
+            'Content-Type': 'application/json',
+            host: apiUrl.hostname, // compulsory
+        },
+    });
+    return signed;
 
 }
 
