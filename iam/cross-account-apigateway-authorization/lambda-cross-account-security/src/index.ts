@@ -3,12 +3,12 @@
  */
 
 import https, { RequestOptions } from 'https';
-import {AssumeRoleCommand, STSClient} from '@aws-sdk/client-sts';
+import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 
 export const handler = async () => {
     console.log("async handler started");
     const stsResponse = await getStsData();
-
+    console.log("STS Response ", stsResponse);
     const response = await getRestAPIResponse();
     console.log("API Response value ", response);
     console.log("async handler stopped");
@@ -18,7 +18,7 @@ export const handler = async () => {
 /**
  * Method to invoke RESTAPI and get response.
  */
-function getRestAPIResponse(){
+function getRestAPIResponse() {
 
     const url: string = process.env.ENDPOINT as string;
 
@@ -56,21 +56,22 @@ function getRestAPIResponse(){
 }
 
 async function getStsData() {
-    
-    try{
+
+    try {
 
         const REGION = "us-west-2";
         const client = new STSClient({ region: REGION });
 
         const command = new AssumeRoleCommand({
-            RoleArn: process.env.ROLE_ARN,
+            RoleArn: process.env.ROLE_ARN, // Role from destination account
             RoleSessionName: "session1",
-            DurationSeconds: 90
+            DurationSeconds: 900
         });
 
-        const response = await client.send(command); 
+        const response = await client.send(command);
         console.log("STS response", response);
-    } catch(error){
+        return response;
+    } catch (error) {
         console.error("error occurred in getstsData", error);
     }
 }

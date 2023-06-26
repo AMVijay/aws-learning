@@ -1,5 +1,5 @@
 {
-  "name": "lambda-restclient",
+  "name": "lambda-cross-account-security",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
