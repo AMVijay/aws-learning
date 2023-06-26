@@ -3,14 +3,17 @@
  */
 
 import https, { RequestOptions } from 'https';
-import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
+import { AssumeRoleCommand, Credentials, STSClient } from '@aws-sdk/client-sts';
+import { SignatureV4 } from '@aws-sdk/signature-v4';
+import { Sha256 } from '@aws-crypto/sha256-js';
 
 export const handler = async () => {
     console.log("async handler started");
     const stsResponse = await getStsData();
-    console.log("STS Response ", stsResponse);
+    console.log("handler > STS Response ", stsResponse);
+    await getSignedRequest(stsResponse?.Credentials as Credentials);
     const response = await getRestAPIResponse();
-    console.log("API Response value ", response);
+    console.log("handler > API Response value ", response);
     console.log("async handler stopped");
     return response;
 }
@@ -56,7 +59,6 @@ function getRestAPIResponse() {
 }
 
 async function getStsData() {
-
     try {
 
         const REGION = "us-west-2";
@@ -75,3 +77,18 @@ async function getStsData() {
         console.error("error occurred in getstsData", error);
     }
 }
+async function getSignedRequest(credentials: Credentials) {
+
+    const signv4 = new SignatureV4({
+        service: 'execute-api',
+        region: 'us-west-2',
+        credentials: {
+            accessKeyId: credentials.AccessKeyId as string,
+            secretAccessKey: credentials.SecretAccessKey as string,
+            sessionToken: credentials.SessionToken as string
+        },
+        sha256: Sha256
+    });
+
+}
+

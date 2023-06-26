@@ -10,7 +10,9 @@
   "author": "VIJAYaraaghavan Manoharan",
   "license": "ISC",
   "devDependencies": {
+    "@aws-crypto/sha256-js": "^4.0.0",
     "@aws-sdk/client-sts": "^3.359.0",
+    "@aws-sdk/signature-v4": "^3.357.0",
     "@types/node": "^20.3.1",
     "mkdirp": "^3.0.1",
     "rimraf": "^5.0.1",
