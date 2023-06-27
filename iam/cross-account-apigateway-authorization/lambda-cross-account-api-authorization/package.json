@@ -1,5 +1,5 @@
 {
-  "name": "lambda-cross-account-security",
+  "name": "lambda-cross-account-api-authorization",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

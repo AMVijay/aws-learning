@@ -1,5 +1,7 @@
 /**
  * @author VIJAYaraaghavan Manoharan
+ * POC to access Rest API hosted in AWS Account A from Lambda hosted in AWS Account B.
+ * Cross Account API Access with AWS IAM authorization. 
  */
 
 import https, { RequestOptions } from 'https';
@@ -10,7 +12,7 @@ import { HttpRequest } from '@aws-sdk/types';
 
 export const handler = async () => {
     console.log("async handler started");
-    const stsResponse = await getStsData();
+    const stsResponse = await getSTSFromAnotherAWSAccount();
     console.log("handler > STS Response ", stsResponse);
     const signedRequest = await getSignedRequest(stsResponse?.Credentials as Credentials);
     console.log("handler > SignedRequestData ", signedRequest);
@@ -20,50 +22,11 @@ export const handler = async () => {
     return response;
 }
 
-/**
- * Method to invoke RESTAPI and get response.
- */
-function getRestAPIResponse(signedRequestData: HttpRequest) {
+const REGION = "us-west-2";
 
-    const url: string = process.env.ENDPOINT as string;
-
-    console.log("Endpoint value is ", url);
-
-    const options: RequestOptions = {
-        method: "GET",
-        headers: {
-            "Content-Type": 'application/json'
-        }
-    }
-
-    // Sending the request
-    return new Promise((resolve, reject) => {
-
-        https.request(url, signedRequestData, (res) => {
-            console.log("sent request");
-            let data = ''
-
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            // Ending the response 
-            res.on('end', () => {
-                console.log('Body:', data);
-            });
-
-        }).on("error", (err) => {
-            console.log("Error: ", err)
-        }).end()
-
-    });
-
-}
-
-async function getStsData() {
+async function getSTSFromAnotherAWSAccount() {
     try {
 
-        const REGION = "us-west-2";
         const client = new STSClient({ region: REGION });
 
         const command = new AssumeRoleCommand({
@@ -79,11 +42,12 @@ async function getStsData() {
         console.error("error occurred in getstsData", error);
     }
 }
+
 async function getSignedRequest(credentials: Credentials) {
 
     const sigv4 = new SignatureV4({
         service: 'execute-api',
-        region: 'us-west-2',
+        region: REGION,
         credentials: {
             accessKeyId: credentials.AccessKeyId as string,
             secretAccessKey: credentials.SecretAccessKey as string,
@@ -107,4 +71,51 @@ async function getSignedRequest(credentials: Credentials) {
     return signed;
 
 }
+
+/**
+ * Method to invoke RESTAPI and get response.
+ */
+async function getRestAPIResponse(signedRequestData: HttpRequest) {
+
+    const url: string = process.env.ENDPOINT as string;
+
+    console.log("Endpoint value is ", url);
+
+    const options: RequestOptions = {
+        method: "GET",
+        headers: {
+            "Content-Type": 'application/json'
+        }
+    }
+
+    // Sending the request
+    const response = new Promise((resolve, reject) => {
+
+        https.request(url, signedRequestData, (res) => {
+            console.log("sent request");
+            let data = ''
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // Ending the response 
+            res.on('end', () => {
+                console.log('Body:', data);
+                resolve(JSON.parse(data));
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: ", err)
+            reject(err);
+        }).end()
+
+    });
+
+    return await response
+
+}
+
+
+
 
