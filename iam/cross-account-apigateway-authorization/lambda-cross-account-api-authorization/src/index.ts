@@ -10,6 +10,10 @@ import { SignatureV4 } from '@aws-sdk/signature-v4';
 import { Sha256 } from '@aws-crypto/sha256-js';
 import { HttpRequest } from '@aws-sdk/types';
 
+/**
+ * Lambda handler
+ * @returns 
+ */
 export const handler = async () => {
     console.log("async handler started");
     const stsResponse = await getSTSFromAnotherAWSAccount();
@@ -24,6 +28,10 @@ export const handler = async () => {
 
 const REGION = "us-west-2";
 
+/**
+ * Get AWS secure access tokens from STS
+ * @returns 
+ */
 async function getSTSFromAnotherAWSAccount() {
     try {
 
@@ -43,6 +51,11 @@ async function getSTSFromAnotherAWSAccount() {
     }
 }
 
+/**
+ * Get Signed Input data for REST API call.
+ * @param credentials
+ * @returns 
+ */
 async function getSignedRequest(credentials: Credentials) {
 
     const sigv4 = new SignatureV4({
@@ -81,12 +94,12 @@ async function getRestAPIResponse(signedRequestData: HttpRequest) {
 
     console.log("Endpoint value is ", url);
 
-    const options: RequestOptions = {
-        method: "GET",
-        headers: {
-            "Content-Type": 'application/json'
-        }
-    }
+    // const options: RequestOptions = {
+    //     method: "GET",
+    //     headers: {
+    //         "Content-Type": 'application/json'
+    //     }
+    // }
 
     // Sending the request
     const response = new Promise((resolve, reject) => {
