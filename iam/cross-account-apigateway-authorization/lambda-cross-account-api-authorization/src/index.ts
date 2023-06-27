@@ -44,7 +44,6 @@ async function getSTSFromAnotherAWSAccount() {
         });
 
         const response = await client.send(command);
-        console.log("STS response", response);
         return response;
     } catch (error) {
         console.error("error occurred in getstsData", error);
@@ -78,7 +77,7 @@ async function getSignedRequest(credentials: Credentials) {
         protocol: apiUrl.protocol,
         headers: {
             'Content-Type': 'application/json',
-            host: apiUrl.hostname, // compulsory
+            host: apiUrl.hostname, // mandatory
         },
     });
     return signed;
@@ -105,7 +104,6 @@ async function getRestAPIResponse(signedRequestData: HttpRequest) {
     const response = new Promise((resolve, reject) => {
 
         https.request(url, signedRequestData, (res) => {
-            console.log("sent request");
             let data = ''
 
             res.on('data', (chunk) => {
@@ -114,12 +112,11 @@ async function getRestAPIResponse(signedRequestData: HttpRequest) {
 
             // Ending the response 
             res.on('end', () => {
-                console.log('Body:', data);
                 resolve(JSON.parse(data));
             });
 
         }).on("error", (err) => {
-            console.log("Error: ", err)
+            console.error("Error: ", err)
             reject(err);
         }).end()
 
