@@ -11,6 +11,15 @@
 
 ## API Gateway Configuration with AWS IAM authorizer
 
+### Steps to do in AWS Account A Service Provider
+1. REST API setup and configuration in API Gateway configuration.
+2. Enable AWS IAM for the REST API.
+3. IAM Role Configuration with Trust Relation enabled for AWS Account B Service Consumer.
+
+## Steps to do in AWS Account B Service Consumer
+1. Create 
+
+
 ## IAM roles configuration in ServiceProvider and ServiceConsumer
 
 ### Service Provider Account IAM Role Config
