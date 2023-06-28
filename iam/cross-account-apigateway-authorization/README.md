@@ -6,8 +6,8 @@
 * Now Lambda hosted in ServiceConsumer account needs to access REST API hosted in ServiceProvider account with AWS IAM authorization.
 
 ## Design
-![Design](20230627-cross-account-api-authorization.jpg)
 
+![20230627-cross-account-api-authorization](https://github.com/AMVijay/aws-learning/assets/8252947/958a92cd-350e-4757-ad84-a65832166ca9)
 
 ## API Gateway Configuration with AWS IAM authorizer
 
