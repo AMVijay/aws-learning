@@ -81,7 +81,7 @@
 
 
 ## Lambda RESTClient POC with Cross account authorization and Access API
-Refer the lambda source in repo 
+Refer the lambda source in repo https://github.com/AMVijay/aws-learning/blob/main/iam/cross-account-apigateway-authorization/lambda-cross-account-api-authorization/src/index.ts. 
 
 
 ## Conclusion
