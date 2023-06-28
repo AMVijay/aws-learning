@@ -28,6 +28,24 @@
 ## IAM roles configuration in ServiceProvider and ServiceConsumer
 
 ### IAM Role Config in Service Provider Account
+* AWS Managed Policy `AmazonAPIGatewayInvokeFullAccess` is assigned with below stated Trust Relationships.
+#### Role Permission Configuration
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "execute-api:Invoke",
+                "execute-api:ManageConnections"
+            ],
+            "Resource": "arn:aws:execute-api:*:*:*"
+        }
+    ]
+}
+```
+#### Role Trust Relationships
 ```
 {
     "Version": "2012-10-17",
@@ -44,8 +62,8 @@
 }
 ```
 
-### IAM Config in Service Consumer account
-#### Policy 
+### IAM Config in Service Consumer account 
+#### Custom Policy  
 ```
 {
     "Version": "2012-10-17",
@@ -59,6 +77,8 @@
     ]
 }
 ```
+* Attach this policy to the Lambda IAM Role.
+
 
 ## Lambda RESTClient POC with Cross account authorization and Access API
 Refer the lambda source in repo 
