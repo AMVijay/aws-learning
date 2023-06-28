@@ -17,12 +17,17 @@
 3. IAM Role Configuration with Trust Relation enabled for AWS Account B Service Consumer.
 
 ## Steps to do in AWS Account B Service Consumer
-1. Create 
+1. Create Policy with Trust Relationship to access Accou t A Role created earlier. 
+2. Create IAM role and attach the policy created earlier and use this role for Lambda execution. 
+3. Create Lambda with below logic 
+    * Get STS Token for Role of Account A.
+    * Get Signature for the request data.
+    * Send the signed request data. 
 
 
 ## IAM roles configuration in ServiceProvider and ServiceConsumer
 
-### Service Provider Account IAM Role Config
+### IAM Role Config in Service Provider Account
 ```
 {
     "Version": "2012-10-17",
@@ -39,9 +44,24 @@
 }
 ```
 
+### IAM Config in Service Consumer account
+#### Policy 
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::<Service Provider AWS Account Number>:role/<Role Name from Service Provider Account>"
+        }
+    ]
+}
+```
 
 ## Lambda RESTClient POC with Cross account authorization and Access API
-
+Refer the lambda source in repo 
 
 
 ## Conclusion
