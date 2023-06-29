@@ -85,5 +85,5 @@ Refer the lambda source in repo https://github.com/AMVijay/aws-learning/blob/mai
 
 
 ## Conclusion
-
+When both consumer and provider are in AWS platform, this design is great for security. 
 
