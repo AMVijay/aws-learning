@@ -1,0 +1,14 @@
+{
+  "name": "lambda-fn-cf-authorizer",
+  "version": "1.0.0",
+  "description": "lambda authorizer for cloufront",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vijayaraaghavan Manoharan",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
