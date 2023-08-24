@@ -4,7 +4,7 @@
   "description": "lambda authorizer for cloufront",
   "main": "index.js",
   "scripts": {
-    "build": "npx rimraf dist lambda.zip && npx mkdirp dist && npx webpack && npx zip -rq lambda.zip dist"
+    "build": "npx rimraf dist lambda.zip && npx mkdirp dist && npx webpack && zip -rq lambda.zip dist"
   },
   "author": "Vijayaraaghavan Manoharan",
   "license": "ISC",
