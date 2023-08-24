@@ -1,8 +1,9 @@
 import { Configuration } from "webpack";
 
 const config: Configuration = {
-    mode: "production",
-    entry: "../src/index.ts",
+    mode: "development",
+    devtool: "inline-source-map",
+    entry: "./src/index.ts",
     output: {
         filename: "index.js",
         library: {
@@ -13,9 +14,9 @@ const config: Configuration = {
     module: {
         rules: [
             // all files with a `.ts`, `.cts`, `.mts` or `.tsx` extension will be handled by `ts-loader`
-            { 
+            {
                 loader: "ts-loader",
-                test: /\.([cm]?ts|tsx)$/ 
+                test: /\.([cm]?ts|tsx)$/
             }
         ]
     },
@@ -30,3 +31,5 @@ const config: Configuration = {
         }
     },
 }
+
+export default config;
