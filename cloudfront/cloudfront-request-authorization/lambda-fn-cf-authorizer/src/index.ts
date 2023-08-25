@@ -1,4 +1,5 @@
 import { Callback, CloudFrontRequest, Context, Handler } from "aws-lambda";
+import {InvokeCommand, InvokeCommandInput, LambdaClient} from "@aws-sdk/client-lambda";
 
 /**
  * Lambda handler to authorize Cloudfront Request.
@@ -11,7 +12,8 @@ export const handler: Handler = async (event: any, context: Context, callback: C
     console.log("Event ", event);
     if (checkCloudfrontRequestDetails(event)) {
         const request: CloudFrontRequest = event.Records[0].cf.request;
-        if (authorizeCloudfrontRequest(request)) {
+        const authorizationStatus = await authorizeCloudfrontRequest(request);
+        if (authorizationStatus) {
             callback(null, request);
         }
         else {
@@ -43,7 +45,19 @@ function checkCloudfrontRequestDetails(event: any) {
         true : false;
 }
 
-function authorizeCloudfrontRequest(request: CloudFrontRequest) {
-    return false;
+async function authorizeCloudfrontRequest(request: CloudFrontRequest) {
+    
+    const client = new LambdaClient();
+    const input: InvokeCommandInput = {
+        FunctionName: process.env.FUNCTION_NAME,
+        InvocationType: "Event",
+        Payload: Buffer.from(JSON.stringify(request.headers),"utf8")
+    } 
+
+    const inputCommand = new InvokeCommand(input);
+    const response = await client.send(inputCommand);
+    console.log("response ", response);
+    return true;
+
 }
 

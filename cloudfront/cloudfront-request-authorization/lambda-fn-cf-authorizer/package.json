@@ -9,6 +9,7 @@
   "author": "Vijayaraaghavan Manoharan",
   "license": "ISC",
   "devDependencies": {
+    "@aws-sdk/client-lambda": "^3.398.0",
     "@types/aws-lambda": "^8.10.119",
     "@types/node": "^20.5.3",
     "@types/webpack": "^5.28.2",
