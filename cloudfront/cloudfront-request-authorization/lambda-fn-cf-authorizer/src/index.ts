@@ -47,9 +47,11 @@ function checkCloudfrontRequestDetails(event: any) {
 
 async function authorizeCloudfrontRequest(request: CloudFrontRequest) {
     
-    const client = new LambdaClient();
+    const client = new LambdaClient({
+        region: "us-east-1"
+    });
     const input: InvokeCommandInput = {
-        FunctionName: process.env.FUNCTION_NAME,
+        FunctionName: "lf-test",
         InvocationType: "Event",
         Payload: Buffer.from(JSON.stringify(request.headers),"utf8")
     } 
