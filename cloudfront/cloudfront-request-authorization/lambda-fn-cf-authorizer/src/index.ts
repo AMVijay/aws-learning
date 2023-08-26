@@ -10,6 +10,7 @@ import {InvokeCommand, InvokeCommandInput, LambdaClient} from "@aws-sdk/client-l
 export const handler: Handler = async (event: any, context: Context, callback: Callback) => {
     console.log("handler method execution");
     console.log("Event ", event);
+    console.log("Event JSON ", JSON.stringify(event));
     if (checkCloudfrontRequestDetails(event)) {
         const request: CloudFrontRequest = event.Records[0].cf.request;
         const authorizationStatus = await authorizeCloudfrontRequest(request);
@@ -46,6 +47,10 @@ function checkCloudfrontRequestDetails(event: any) {
 }
 
 async function authorizeCloudfrontRequest(request: CloudFrontRequest) {
+
+    // const dongleID = request.headers["X-dongleID"][0].value;
+    // console.log("Headers ", JSON.stringify(request.headers));
+    // console.log("dongleID ", dongleID);
     
     const client = new LambdaClient({
         region: "us-east-1"
