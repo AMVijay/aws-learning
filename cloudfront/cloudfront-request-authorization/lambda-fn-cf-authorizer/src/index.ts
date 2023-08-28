@@ -13,7 +13,8 @@ export const handler: Handler = async (event: any, context: Context, callback: C
     console.log("Event JSON ", JSON.stringify(event));
     if (checkCloudfrontRequestDetails(event)) {
         const request: CloudFrontRequest = event.Records[0].cf.request;
-        const authorizationStatus = await authorizeCloudfrontRequest(request);
+        // const authorizationStatus = await authorizeCloudfrontRequest(request);
+        const authorizationStatus = true;
         console.log("authorizationStatus ", authorizationStatus);
         if (authorizationStatus) {
             callback(null, request);
@@ -49,23 +50,22 @@ function checkCloudfrontRequestDetails(event: any) {
 
 async function authorizeCloudfrontRequest(request: CloudFrontRequest) {
 
-    // const dongleID = request.headers["X-dongleID"][0].value;
-    // console.log("Headers ", JSON.stringify(request.headers));
-    // console.log("dongleID ", dongleID);
-    
     const client = new LambdaClient({
         region: "us-east-1"
     });
     const input: InvokeCommandInput = {
-        FunctionName: "lf-test",
-        InvocationType: "Event",
+        FunctionName: "<function name>",
+        InvocationType: "RequestResponse",
         Payload: Buffer.from(JSON.stringify(request.headers),"utf8")
     } 
 
     const inputCommand = new InvokeCommand(input);
     const response = await client.send(inputCommand);
     console.log("response ", response);
-    return true;
+    if(response.StatusCode == 200){
+        return true;
+    }
+    return false;
 
 }
 
