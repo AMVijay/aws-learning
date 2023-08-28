@@ -13,13 +13,14 @@ export const handler: Handler = async (event: any, context: Context, callback: C
     console.log("Event JSON ", JSON.stringify(event));
     if (checkCloudfrontRequestDetails(event)) {
         const request: CloudFrontRequest = event.Records[0].cf.request;
-        // const authorizationStatus = await authorizeCloudfrontRequest(request);
-        const authorizationStatus = true;
+        const authorizationStatus: boolean = await authorizeCloudfrontRequest(request);
         console.log("authorizationStatus ", authorizationStatus);
         if (authorizationStatus) {
+            console.log("move forwared in request processing")
             callback(null, request);
         }
         else {
+            console.log("unauthorized response")
             const response = getUnauthorizedMessage();
             callback(null, response);
         }
@@ -54,7 +55,7 @@ async function authorizeCloudfrontRequest(request: CloudFrontRequest) {
         region: "us-east-1"
     });
     const input: InvokeCommandInput = {
-        FunctionName: "<function name>",
+        FunctionName: "<Function name>",
         InvocationType: "RequestResponse",
         Payload: Buffer.from(JSON.stringify(request.headers),"utf8")
     } 
@@ -62,10 +63,9 @@ async function authorizeCloudfrontRequest(request: CloudFrontRequest) {
     const inputCommand = new InvokeCommand(input);
     const response = await client.send(inputCommand);
     console.log("response ", response);
-    if(response.StatusCode == 200){
-        return true;
-    }
-    return false;
+    console.log("response payload ",response.Payload?.transformToString());
+    const responseStatus: boolean = response.Payload ? JSON.parse(response.Payload.transformToString()): false;
+    return responseStatus;
 
 }
 
