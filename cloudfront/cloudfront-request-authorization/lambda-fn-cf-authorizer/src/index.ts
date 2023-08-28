@@ -14,6 +14,7 @@ export const handler: Handler = async (event: any, context: Context, callback: C
     if (checkCloudfrontRequestDetails(event)) {
         const request: CloudFrontRequest = event.Records[0].cf.request;
         const authorizationStatus = await authorizeCloudfrontRequest(request);
+        console.log("authorizationStatus ", authorizationStatus);
         if (authorizationStatus) {
             callback(null, request);
         }
