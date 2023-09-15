@@ -55,7 +55,7 @@ async function authorizeCloudfrontRequest(request: CloudFrontRequest) {
         region: "us-east-1"
     });
     const input: InvokeCommandInput = {
-        FunctionName: "<Function name>",
+        FunctionName: "<Function name>", //TODO Mention the function name
         InvocationType: "RequestResponse",
         Payload: Buffer.from(JSON.stringify(request.headers),"utf8")
     } 

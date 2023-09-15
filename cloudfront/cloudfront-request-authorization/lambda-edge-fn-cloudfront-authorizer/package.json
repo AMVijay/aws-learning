@@ -1,5 +1,5 @@
 {
-  "name": "lambda-fn-cf-authorizer",
+  "name": "lambda-edge-fn-cloudfront-authorizer",
   "version": "1.0.0",
   "description": "lambda authorizer for cloufront",
   "main": "index.js",
