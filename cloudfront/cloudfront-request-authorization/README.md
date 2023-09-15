@@ -8,7 +8,7 @@
 * Lambda function must needs to be deployed in us-east-1 (Primary region for AWS). This lambda function will be replicated to edge locations when CloudFront is configured with that function.
 * If request headers needs to be passed to Lambda, then make sure the corresponding policy selected accordingly.
 Example: 
-
+![cloudfront-policy-config](https://github.com/AMVijay/aws-learning/assets/8252947/6eabcd7c-c516-4b3a-adcb-83a2d4f5a442)
 
 ## Design
 ![cloudfront-authorizer-design](https://github.com/AMVijay/aws-learning/assets/8252947/6becf97f-9620-4da0-80c7-1f975249510e)
