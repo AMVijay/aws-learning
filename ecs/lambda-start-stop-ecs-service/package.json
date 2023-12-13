@@ -4,7 +4,7 @@
   "description": "Lambda Function to start and stop ECS Service",
   "main": "index.js",
   "scripts": {
-    "build": "npx rimraf dist lambda.zip && npx mkdirp dist && npx tsc && zip lambda.zip dist"
+    "build": "npx rimraf dist lambda.zip && npx mkdirp dist && npx tsc && cd dist && zip -rv ../lambda.zip ."
   },
   "author": "Vijayaraaghavan Manoharan",
   "license": "ISC",
