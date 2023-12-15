@@ -8,6 +8,7 @@ export const handler: Handler = async (event: any, context: Context) => {
         console.info("Tasks :: ", tasks);
         if (event.action === 'stop') {
             for (const taskArn in tasks) {
+                console.log("taskArn :: ", taskArn);
                 const taskId = taskArn.split("/")[2];
                 console.log("Task Id :: " , taskId);
                 await stopTask(taskId, event.clusterName);
