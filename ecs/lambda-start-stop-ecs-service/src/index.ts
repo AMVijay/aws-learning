@@ -3,25 +3,27 @@ import { ECSClient, ListTasksCommand, StartTaskCommand, StopTaskCommand } from '
 
 export const handler: Handler = async (event: any, context: Context) => {
     console.info("event", JSON.stringify(event));
-    if(event && event.clusterName && event.regionName && event.action){
+    if (event && event.clusterName && event.regionName && event.action) {
         const tasks = await fetchTasks(event.clusterName, event.regionName);
         console.info("Tasks :: ", tasks);
-        if(event.action === 'stop'){
-            for(const task in tasks){
-                await stopTask(task);
+        if (event.action === 'stop') {
+            for (const taskArn in tasks) {
+                const taskId = taskArn.split("/")[2];
+                console.log("Task Id :: " , taskId);
+                await stopTask(taskId, event.clusterName);
             }
         }
-        else if(event.action === 'start'){
-            for(const task in tasks){
+        else if (event.action === 'start') {
+            for (const task in tasks) {
                 await startTask(task);
-            } 
+            }
         }
-        
+
     }
-    else{
+    else {
         return "Invalid Input";
     }
-    
+
 }
 
 async function fetchTasks(clusterName: string, regionName: string) {
@@ -37,10 +39,11 @@ async function fetchTasks(clusterName: string, regionName: string) {
     return response.taskArns;
 }
 
-async function stopTask(taskArn: string) {
+async function stopTask(taskId: string, clusterName: string) {
     const client = new ECSClient();
     const command = new StopTaskCommand({
-        task: taskArn
+        cluster: clusterName,
+        task: taskId
     });
     const response = await client.send(command);
     console.log("stopTask response");
