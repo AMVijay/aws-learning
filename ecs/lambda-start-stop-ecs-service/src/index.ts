@@ -7,12 +7,7 @@ export const handler: Handler = async (event: any, context: Context) => {
         const tasks = await fetchTasks(event.clusterName, event.regionName);
         console.info("Tasks :: ", tasks);
         if (event.action === 'stop') {
-            for (const taskArn in tasks) {
-                console.log("taskArn :: ", taskArn);
-                const taskId = taskArn.split("/")[2];
-                console.log("Task Id :: " , taskId);
-                await stopTask(taskId, event.clusterName);
-            }
+            await stopTasks(tasks, event.clusterName);
         }
         else if (event.action === 'start') {
             for (const task in tasks) {
@@ -40,14 +35,21 @@ async function fetchTasks(clusterName: string, regionName: string) {
     return response.taskArns;
 }
 
-async function stopTask(taskId: string, clusterName: string) {
+async function stopTasks(tasks: any, clusterName: string) {
+    console.log("TaskArns to stop :: ", tasks);
     const client = new ECSClient();
-    const command = new StopTaskCommand({
-        cluster: clusterName,
-        task: taskId
-    });
-    const response = await client.send(command);
-    console.log("stopTask response");
+    for (const taskArn of tasks) {
+        console.log("taskArn :: ", taskArn);
+        const taskId = taskArn.split("/")[2];
+        console.log("Task Id :: " , taskId);
+        const command = new StopTaskCommand({
+            cluster: clusterName,
+            task: taskId
+        });
+        const response = await client.send(command);
+        console.log("stopTask response");
+    }
+    
 }
 
 
