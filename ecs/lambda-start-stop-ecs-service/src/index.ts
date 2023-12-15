@@ -1,5 +1,5 @@
 import { Context, Handler } from "aws-lambda";
-import { ECSClient, ListTasksCommand, StartTaskCommand, StopTaskCommand } from '@aws-sdk/client-ecs';
+import { ECSClient, ListTasksCommand, StartTaskCommand, StopTaskCommand, UpdateServiceCommand } from '@aws-sdk/client-ecs';
 
 export const handler: Handler = async (event: any, context: Context) => {
     console.info("event", JSON.stringify(event));
@@ -11,7 +11,7 @@ export const handler: Handler = async (event: any, context: Context) => {
         }
         else if (event.action === 'start') {
             for (const task in tasks) {
-                await startTask(task);
+                await startTask(event.clusterName, event.serviceName, event.regionName);
             }
         }
 
@@ -41,7 +41,7 @@ async function stopTasks(tasks: any, clusterName: string) {
     for (const taskArn of tasks) {
         console.log("taskArn :: ", taskArn);
         const taskId = taskArn.split("/")[2];
-        console.log("Task Id :: " , taskId);
+        console.log("Task Id :: ", taskId);
         const command = new StopTaskCommand({
             cluster: clusterName,
             task: taskId
@@ -49,15 +49,20 @@ async function stopTasks(tasks: any, clusterName: string) {
         const response = await client.send(command);
         console.log("stopTask response");
     }
-    
+
 }
 
 
-async function startTask(taskArn: string) {
-    const client = new ECSClient();
-    // const command = new StartTaskCommand({
+async function startTask(clusterName: string, serviceName: string, regionName: string) {
+    const client = new ECSClient({
+        region: regionName
+    });
+    const command = new UpdateServiceCommand({
+        cluster: clusterName,
+        service: serviceName,
+        desiredCount: 1
 
-    // });
-    // const response = await client.send(command);
+    });
+    const response = await client.send(command);
     console.log("response");
 }
