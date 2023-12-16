@@ -1,17 +1,21 @@
 import { Context, Handler } from "aws-lambda";
-import { ECSClient, ListTasksCommand, StartTaskCommand, StopTaskCommand, UpdateServiceCommand } from '@aws-sdk/client-ecs';
+import { ECSClient, ListClustersCommand, ListServicesCommand, ListTasksCommand, StartTaskCommand, StopTaskCommand, UpdateServiceCommand } from '@aws-sdk/client-ecs';
 
 export const handler: Handler = async (event: any, context: Context) => {
     console.info("event", JSON.stringify(event));
-    if (event && event.clusterName && event.regionName && event.action) {
-        const tasks = await fetchTasks(event.clusterName, event.regionName);
-        console.info("Tasks :: ", tasks);
-        if (event.action === 'stop') {
-            await stopTasks(tasks, event.clusterName);
-        }
-        else if (event.action === 'start') {
-            for (const task in tasks) {
-                await startTask(event.clusterName, event.serviceName, event.regionName);
+    if (event && event.dr) {
+        const regionName = "us-west-2";
+        const clusters = await fetchClusters(regionName);
+        if (clusters) {
+            console.info("Clusters :: ", clusters);
+            for (const clusterArn of clusters) {
+                const services = await fetchServices(clusterArn,regionName);
+                if(services){
+                    console.log("Services :: ", services);
+                    for(const serviceArn of services){
+                        await updateService(clusterArn, serviceArn,regionName, event.dr === 'true' ? 1: 0);
+                    }
+                }
             }
         }
 
@@ -22,47 +26,37 @@ export const handler: Handler = async (event: any, context: Context) => {
 
 }
 
-async function fetchTasks(clusterName: string, regionName: string) {
-    console.log("FetchTasks for Cluster Name :: ", clusterName);
-    const client = new ECSClient({
-        region: regionName
-    });
-    const command = new ListTasksCommand({
-        cluster: clusterName
-    });
-    const response = await client.send(command);
-    console.log("response :: ", response);
-    return response.taskArns;
-}
-
-async function stopTasks(tasks: any, clusterName: string) {
-    console.log("TaskArns to stop :: ", tasks);
-    const client = new ECSClient();
-    for (const taskArn of tasks) {
-        console.log("taskArn :: ", taskArn);
-        const taskId = taskArn.split("/")[2];
-        console.log("Task Id :: ", taskId);
-        const command = new StopTaskCommand({
-            cluster: clusterName,
-            task: taskId
-        });
-        const response = await client.send(command);
-        console.log("stopTask response");
-    }
-
-}
-
-
-async function startTask(clusterName: string, serviceName: string, regionName: string) {
+async function updateService(clusterName: string, serviceName: string, regionName: string, taskCount: number) {
     const client = new ECSClient({
         region: regionName
     });
     const command = new UpdateServiceCommand({
         cluster: clusterName,
         service: serviceName,
-        desiredCount: 1
+        desiredCount: taskCount
 
     });
     const response = await client.send(command);
     console.log("response");
 }
+
+async function fetchClusters(regionName : string) {
+    const client = new ECSClient({
+        region: regionName
+    });
+    const command = new ListClustersCommand({});
+    const response = await client.send(command);
+    return response.clusterArns;
+}
+
+async function fetchServices(clusterArn: string, regionName: string) {
+    const client = new ECSClient({
+        region: regionName
+    });
+    const command = new ListServicesCommand({
+        cluster: clusterArn
+    });
+    const response = await client.send(command);
+    return response.serviceArns;
+}
+
