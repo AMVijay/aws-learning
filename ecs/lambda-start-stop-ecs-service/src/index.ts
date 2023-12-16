@@ -37,7 +37,7 @@ async function updateService(clusterName: string, serviceName: string, regionNam
 
     });
     const response = await client.send(command);
-    console.log("response");
+    return response;
 }
 
 async function fetchClusters(regionName : string) {
