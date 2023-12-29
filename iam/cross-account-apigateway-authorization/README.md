@@ -17,7 +17,7 @@
 3. IAM Role Configuration with Trust Relation enabled for AWS Account B Service Consumer.
 
 ## Steps to do in AWS Account B Service Consumer
-1. Create Policy with Trust Relationship to access Accou t A Role created earlier. 
+1. Create Policy with Trust Relationship to access Account A Role created earlier. 
 2. Create IAM role and attach the policy created earlier and use this role for Lambda execution. 
 3. Create Lambda with below logic 
     * Get STS Token for Role of Account A.
