@@ -1,0 +1,28 @@
+# AWS Storage Analysis
+
+Three types of storage available in AWS. 
+1. Object Storage
+2. Block Storage
+3. File Storage
+
+## Object Storage
+* AWS S3 - Simple Storage Service. 
+* AWS Glacier.  
+
+## Block Storage
+### EBS - Elastic Block Storage.
+* Low Latency.
+* Used in EC2. 
+* Best fit to use in batch processing which requires high IO through put support. 
+
+### EC2 Instance Store
+* Ephermal Storage
+* Typically used in EC2 for caching temp files for better performance.
+
+## File Storage
+### EFS - Elastic File Storage
+* Network File System. 
+* Can be mounted in EC2, ECS, EKS.
+
+### FSx 
+* Windows File Server.
