@@ -21,8 +21,10 @@ Three types of storage available in AWS.
 
 ## File Storage
 ### EFS - Elastic File Storage
-* Network File System. 
+* NFS (Network File System) protocol is used. 
+* NFS is native to Unix and Linux.  
 * Can be mounted in EC2, ECS, EKS.
 
 ### FSx 
-* Windows File Server.
+* SMB (Server Message Block) protocol used. 
+SMB is native to Windows.
