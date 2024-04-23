@@ -1,1 +1,5 @@
-console.log("Hello, World");
+export const handler = async () => {
+    console.log("Hello, World");
+}
+
+handler();
