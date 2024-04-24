@@ -1,5 +1,6 @@
 import { exec, execSync } from 'child_process';
-import { writeFileSync } from 'fs'
+import { readFileSync } from 'fs'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export const DEFAULT_ARGS = [
     '--headless',
@@ -11,10 +12,24 @@ export const DEFAULT_ARGS = [
     '--norestore',
 ];
 
+const client = new S3Client({});
+
 export const handler = async () => {
-    console.log("Hello, World");
-    writeFileSync('/tmp/hello.txt', Buffer.from("Hello, World"));
-    console.log("hello.txt created");
+    console.log("Word to PDF Conversion starts");
+    const s3Bucket = process.env.S3_BUCKET;
+    const inputFile = process.env.inputFile;
+    // const getObjectCommand = new GetObjectCommand({
+    //     Bucket: s3Bucket,
+    //     Key: inputFile
+    // });
+
+    // try{
+    //     const response = await client.send(getObjectCommand);
+    //     const str = await response.Body?.transformToString();
+    // } catch(error){
+    //     console.error("Error in getObject ", error);
+    // }
+
     // execSync(`cd /tmp`);
     // execSync(`libreoffice7.6 --headless --invisible --nodefault --view --nolockcheck --nologo --norestore --convert-to pdf --outdir /tmp /tmp/test.docx`);
     let logs;
@@ -28,5 +43,21 @@ export const handler = async () => {
         logs = (await exec(cmd)).stdout;
     }
     console.log("logs", logs);
-    console.log("complete PDF Conversion");
+
+    const fileContent = readFileSync("/tmp/test.pdf");
+
+    const putObjectCommand = new PutObjectCommand({
+        Bucket: s3Bucket,
+        Key: 'test.pdf',
+        Body: fileContent
+    });
+
+    try{
+        const response = await client.send(putObjectCommand);
+        console.log("response ", response);
+    } catch(error){
+        console.error("Error in putObject ", error);
+    }
+
+    console.log("Word to PDF Conversion Completed");
 }
