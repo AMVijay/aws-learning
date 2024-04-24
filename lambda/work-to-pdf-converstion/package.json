@@ -4,11 +4,14 @@
   "description": "Word to PDF Convertion",
   "main": "index.js",
   "scripts": {
+    "build": "npx rimraf dist/ && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vijayaraaghavan Manoharan",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.12.7",
+    "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }

@@ -1,4 +1,4 @@
 FROM public.ecr.aws/shelf/lambda-libreoffice-base:7.6-node18-x86_64
 
-COPY index.js ${LAMBDA_TASK_ROOT}/
+COPY dist/index.js ${LAMBDA_TASK_ROOT}/
 CMD ["index.handler"]
