@@ -1,5 +1,5 @@
-import { exec, execSync } from 'child_process';
-import { readFileSync } from 'fs'
+import { exec, execSync, spawn } from 'child_process';
+import { readFileSync, readdirSync } from 'fs'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export const DEFAULT_ARGS = [
@@ -30,21 +30,33 @@ export const handler = async () => {
     //     console.error("Error in getObject ", error);
     // }
 
-    // execSync(`cd /tmp`);
-    // execSync(`libreoffice7.6 --headless --invisible --nodefault --view --nolockcheck --nologo --norestore --convert-to pdf --outdir /tmp /tmp/test.docx`);
+    execSync('cd /home/');
+    execSync('libreoffice7.6 --headless --convert-to pdf /home/test.docx');
     let logs;
     const LO_BINARY_PATH = 'libreoffice7.6';
     const argumentsString = DEFAULT_ARGS.join(' ');
-    const cmd = `cd /tmp && ${LO_BINARY_PATH} ${argumentsString} --convert-to pdf --outdir /tmp '/tmp/test.docx'`;
+    // const cmd = `cd /home/ && ${LO_BINARY_PATH} ${argumentsString} --convert-to pdf --outdir /home/ /home/test.docx`;
     // due to an unknown issue, we need to run command twice
-    try {
-        logs = (await exec(cmd)).stdout;
-    } catch (e) {
-        logs = (await exec(cmd)).stdout;
-    }
-    console.log("logs", logs);
+    // try {
+    //     // let output = execSync(cmd).toString();
+    //     // console.log("output ", output);
+    //     const { stdout, stderr } = await exec(cmd);
+    //     console.log('stdout:', stdout);
+    //     console.error('stderr:', stderr);
+    // } catch (e) {
+    //     logs = await exec(cmd).stdout;
+    // }
 
-    const fileContent = readFileSync("/tmp/test.pdf");
+    // console.log("logs", logs);
+
+    readdirSync('/var/task/').forEach(file => {
+        console.log("/var/task/ content ", file);
+    });
+
+    readdirSync('/home/').forEach(file => {
+        console.log("home folder content ", file);
+    });
+    const fileContent = readFileSync('/var/task/test.pdf');
 
     const putObjectCommand = new PutObjectCommand({
         Bucket: s3Bucket,
@@ -52,12 +64,25 @@ export const handler = async () => {
         Body: fileContent
     });
 
-    try{
+    try {
         const response = await client.send(putObjectCommand);
         console.log("response ", response);
-    } catch(error){
+    } catch (error) {
         console.error("Error in putObject ", error);
     }
 
+    const ls = spawn('ls', ['-lh', '/var']);
+
+    ls.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+
+    ls.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+    });
+
+    ls.on('exit', (code) => {
+        console.log(`child process exited with code ${code}`);
+    });
     console.log("Word to PDF Conversion Completed");
 }
