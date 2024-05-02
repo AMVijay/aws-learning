@@ -31,7 +31,8 @@ export const handler = async () => {
     // }
 
     execSync('cd /home/');
-    execSync('libreoffice7.6 --headless --convert-to pdf /home/test.docx');
+    execSync('libreoffice7.6 --version >> output.txt')
+    // execSync('libreoffice7.6 --headless --convert-to pdf /home/test.docx >> output.txt');
     let logs;
     const LO_BINARY_PATH = 'libreoffice7.6';
     const argumentsString = DEFAULT_ARGS.join(' ');
