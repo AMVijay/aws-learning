@@ -1,6 +1,6 @@
 import { exec, execSync, spawn } from 'child_process';
-import { readFileSync, readdirSync } from 'fs'
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { createWriteStream, readFileSync, readdirSync, writeFile, writeFileSync } from 'fs'
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export const DEFAULT_ARGS = [
     '--headless',
@@ -18,21 +18,28 @@ export const handler = async () => {
     console.log("Word to PDF Conversion starts");
     const s3Bucket = process.env.S3_BUCKET;
     const inputFile = process.env.inputFile;
-    // const getObjectCommand = new GetObjectCommand({
-    //     Bucket: s3Bucket,
-    //     Key: inputFile
-    // });
+    const getObjectCommand = new GetObjectCommand({
+        Bucket: s3Bucket,
+        Key: inputFile
+    });
 
-    // try{
-    //     const response = await client.send(getObjectCommand);
-    //     const str = await response.Body?.transformToString();
-    // } catch(error){
-    //     console.error("Error in getObject ", error);
-    // }
+    try{
+        const response = await client.send(getObjectCommand);
+        const file = createWriteStream(`/tmp/${inputFile}`);
+        response.Body?.transformToWebStream().pipeTo(file)
+    } catch(error){
+        console.error("Error in getObject ", error);
+    }
 
-    execSync('cd /home/');
-    execSync('libreoffice7.6 --version >> output.txt')
-    // execSync('libreoffice7.6 --headless --convert-to pdf /home/test.docx >> output.txt');
+    writeFileSync('/tmp/hello.txt', Buffer.from('Hello World!'));
+    // execSync('cd /tmp/');
+    execSync('libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/test.docx');
+    execSync('libreoffice7.6 --version >> /tmp/output.txt');
+    readdirSync('/tmp/').forEach(file => {
+        console.log("/tmp/ content ", file);
+    });
+    const outputTxt = readFileSync('/tmp/output.txt',{encoding:'utf-8',flag:'r'});
+    console.log("outputTxt :: ", outputTxt);
     let logs;
     const LO_BINARY_PATH = 'libreoffice7.6';
     const argumentsString = DEFAULT_ARGS.join(' ');
@@ -49,7 +56,6 @@ export const handler = async () => {
     // }
 
     // console.log("logs", logs);
-
     readdirSync('/var/task/').forEach(file => {
         console.log("/var/task/ content ", file);
     });
@@ -57,11 +63,11 @@ export const handler = async () => {
     readdirSync('/home/').forEach(file => {
         console.log("home folder content ", file);
     });
-    const fileContent = readFileSync('/var/task/test.pdf');
+    const fileContent = readFileSync('/tmp/output.txt');
 
     const putObjectCommand = new PutObjectCommand({
         Bucket: s3Bucket,
-        Key: 'test.pdf',
+        Key: 'output.txt',
         Body: fileContent
     });
 
