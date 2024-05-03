@@ -23,11 +23,10 @@ export const handler = async () => {
         Key: inputFile
     });
 
-    try{
+    try {
         const response = await client.send(getObjectCommand);
-        const file = createWriteStream(`/tmp/${inputFile}`);
-        response.Body?.transformToWebStream().pipeTo(file)
-    } catch(error){
+        writeFileSync(`/tmp/${inputFile}`, await response.Body.transformToByteArray());
+    } catch (error) {
         console.error("Error in getObject ", error);
     }
 
@@ -38,7 +37,7 @@ export const handler = async () => {
     readdirSync('/tmp/').forEach(file => {
         console.log("/tmp/ content ", file);
     });
-    const outputTxt = readFileSync('/tmp/output.txt',{encoding:'utf-8',flag:'r'});
+    const outputTxt = readFileSync('/tmp/output.txt', { encoding: 'utf-8', flag: 'r' });
     console.log("outputTxt :: ", outputTxt);
     let logs;
     const LO_BINARY_PATH = 'libreoffice7.6';
