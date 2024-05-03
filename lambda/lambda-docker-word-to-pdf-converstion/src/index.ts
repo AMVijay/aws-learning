@@ -39,9 +39,9 @@ export const handler = async () => {
 
     writeFileSync('/tmp/hello.txt', Buffer.from('Hello World!'));
     // execSync('cd /tmp/');
-    execSync('libreoffice7.6 --version >> /tmp/version.txt');
-    const outputTxt = readFileSync('/tmp/version.txt', { encoding: 'utf-8', flag: 'r' });
-    console.log("outputTxt :: ", outputTxt);
+    execSync(`libreoffice7.6 --version >> /tmp/version.txt`);
+    const version = readFileSync('/tmp/version.txt', { encoding: 'utf-8', flag: 'r' });
+    console.log("version :: ", version);
     
     execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile} >> /tmp/conversion.txt`);
     readdirSync('/tmp/').forEach(file => {
