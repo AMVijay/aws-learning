@@ -40,12 +40,17 @@ export const handler = async () => {
     writeFileSync('/tmp/hello.txt', Buffer.from('Hello World!'));
     // execSync('cd /tmp/');
     execSync('libreoffice7.6 --version >> /tmp/version.txt');
-    execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile}`);
+    const outputTxt = readFileSync('/tmp/version.txt', { encoding: 'utf-8', flag: 'r' });
+    console.log("outputTxt :: ", outputTxt);
+    
+    execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile} >> /tmp/conversion.txt`);
     readdirSync('/tmp/').forEach(file => {
         console.log("/tmp/ content after PDF ", file);
     });
-    const outputTxt = readFileSync('/tmp/output.txt', { encoding: 'utf-8', flag: 'r' });
-    console.log("outputTxt :: ", outputTxt);
+
+    const conversionTxt = readFileSync('/tmp/conversion.txt', { encoding: 'utf-8', flag: 'r' });
+    console.log("conversion :: ", conversionTxt);
+    
     let logs;
     const LO_BINARY_PATH = 'libreoffice7.6';
     const argumentsString = DEFAULT_ARGS.join(' ');
