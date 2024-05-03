@@ -25,17 +25,24 @@ export const handler = async () => {
 
     try {
         const response = await client.send(getObjectCommand);
-        writeFileSync(`/tmp/${inputFile}`, await response.Body.transformToByteArray());
+        const data = await response.Body?.transformToByteArray();
+        if (data !== undefined) {
+            writeFileSync(`/tmp/${inputFile}`, data);
+        }
     } catch (error) {
         console.error("Error in getObject ", error);
     }
 
+    readdirSync('/tmp/').forEach(file => {
+        console.log("/tmp/ content before PDF", file);
+    });
+
     writeFileSync('/tmp/hello.txt', Buffer.from('Hello World!'));
     // execSync('cd /tmp/');
-    execSync('libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/test.docx');
-    execSync('libreoffice7.6 --version >> /tmp/output.txt');
+    execSync('libreoffice7.6 --version >> /tmp/version.txt');
+    execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile}`);
     readdirSync('/tmp/').forEach(file => {
-        console.log("/tmp/ content ", file);
+        console.log("/tmp/ content after PDF ", file);
     });
     const outputTxt = readFileSync('/tmp/output.txt', { encoding: 'utf-8', flag: 'r' });
     console.log("outputTxt :: ", outputTxt);
@@ -54,19 +61,14 @@ export const handler = async () => {
     //     logs = await exec(cmd).stdout;
     // }
 
-    // console.log("logs", logs);
-    readdirSync('/var/task/').forEach(file => {
-        console.log("/var/task/ content ", file);
-    });
+    const pdfFile = inputFile?.split(".") + ".pdf";
+    console.log("pdfFile :: ", pdfFile);
 
-    readdirSync('/home/').forEach(file => {
-        console.log("home folder content ", file);
-    });
-    const fileContent = readFileSync('/tmp/output.txt');
+    const fileContent = readFileSync(`/tmp/${pdfFile}`);
 
     const putObjectCommand = new PutObjectCommand({
         Bucket: s3Bucket,
-        Key: 'output.txt',
+        Key: pdfFile,
         Body: fileContent
     });
 
