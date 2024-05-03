@@ -1,5 +1,5 @@
 {
-  "name": "work-to-pdf-converstion",
+  "name": "lambda-docker-word-to-pdf-converstion",
   "version": "1.0.0",
   "description": "Word to PDF Convertion",
   "main": "index.js",
