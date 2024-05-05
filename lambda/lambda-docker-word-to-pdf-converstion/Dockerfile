@@ -6,4 +6,5 @@ COPY dist/index.js ${LAMBDA_TASK_ROOT}/
 COPY test.docx /home/
 COPY test.docx ${LAMBDA_TASK_ROOT}
 RUN libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /home/test.docx
-CMD ["index.handler"]
+# CMD ["index.handler"]
+CMD ["node","index.js"]
