@@ -9,10 +9,17 @@ Here, will go through the steps to delete lambda published versions.
 ## Solution Approach
 * Need to manually delete the Lambda 
 
-## Steps
-* Need to list down the lambda names, VPC details. Command would be 
+## To List all lambda function names, VPC details. Command would be 
 `aws lambda list-functions --region <region name> | jq -r '.Functions[] | .FunctionName+" "+.VpcConfig.VpcId'`
-    * Output can be copied to notepad for reference.
+* Output can be copied to notepad for reference.
 * For each of the lambda listed above, need to check whether any lambda published versions associated to which VPC.
+
+## To list all version details of specific lambda Function with Function Name and VPC details
+`aws lambda list-versions-by-function --function-name <lambda function name> --region us-west-2 | jq -r '.Versions[] | .FunctionName+" "+.VpcConfig.VpcId+" "+.Version'`
+
+## To create delete lambda Function command for specific Lambda Function by version
+`aws lambda list-versions-by-function --function-name <lambda function name> --region us-west-2 | jq -r '.Versions[] | "aws lambda delete-function --function-name "+.FunctionName+":"+.Version'`
+* Output will be in `aws lambda delete-function --function-name <lambda function name>:<version number>`
+* all the output lines need to be executed.
 
 
