@@ -4,4 +4,6 @@ RUN yum install libXinerama.x86_64 cups-libs dbus-glib cairo cups -y
 COPY dist/index.js ${LAMBDA_TASK_ROOT}/
 # COPY node_modules ${LAMBDA_TASK_ROOT}/
 COPY test.docx /home/
+COPY convert-word-to-pdf.sh ${LAMBDA_TASK_ROOT}
+RUN chmod 777 ${LAMBDA_TASK_ROOT}/convert-word-to-pdf.sh
 CMD ["index.handler"]
