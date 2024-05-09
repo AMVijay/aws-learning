@@ -43,7 +43,7 @@ export const handler = async () => {
     const version = readFileSync('/tmp/version.txt', { encoding: 'utf-8', flag: 'r' });
     console.log("version :: ", version);
     
-    execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile} >> /tmp/conversion.txt`);
+    execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile} >> /tmp/conversion.txt`,{ encoding: 'utf-8'});
     readdirSync('/tmp/').forEach(file => {
         console.log("/tmp/ content after PDF ", file);
     });
@@ -66,7 +66,7 @@ export const handler = async () => {
     //     logs = await exec(cmd).stdout;
     // }
 
-    const pdfFile = inputFile?.split(".") + ".pdf";
+    const pdfFile = inputFile?.split(".")[0] + ".pdf";
     console.log("pdfFile :: ", pdfFile);
 
     const fileContent = readFileSync(`/tmp/${pdfFile}`);
