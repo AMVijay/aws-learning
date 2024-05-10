@@ -2,8 +2,9 @@
 
 Using custom docker image.
 
+## Local Build and Validation with HelloWorld
 1. Compile code using `npm run build`
-2. Create Docker image `docker build -t wordtopdf .`  
+2. Create Docker image `docker build -t wordtopdf -f Dockerfile.helloworld .`  
 3. Run the docker image locally `docker run -p 9000:8080 wordtopdf:latest`
 4. Invoke Lambda functions using `curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{"payload":"hello world!"}'`
 

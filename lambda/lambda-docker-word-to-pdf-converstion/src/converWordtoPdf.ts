@@ -1,6 +1,6 @@
 
-import { exec, execSync, spawn } from 'child_process';
-import { createWriteStream, readFileSync, readdirSync, writeFile, writeFileSync } from 'fs'
+import { execSync } from 'child_process';
+import { readFileSync, readdirSync, writeFileSync } from 'fs'
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export const DEFAULT_ARGS = [
@@ -18,6 +18,8 @@ export const handler = async () => {
     console.log("Word to PDF Conversion starts");
     const s3Bucket = process.env.S3_BUCKET;
     const inputFile = process.env.inputFile;
+
+    // Get Word document from S3
     const getObjectCommand = new GetObjectCommand({
         Bucket: s3Bucket,
         Key: inputFile
@@ -33,16 +35,7 @@ export const handler = async () => {
         console.error("Error in getObject ", error);
     }
 
-    readdirSync('/tmp/').forEach(file => {
-        console.log("/tmp/ content before PDF", file);
-    });
-
-    writeFileSync('/tmp/hello.txt', Buffer.from('Hello World!'));
-    // execSync('cd /tmp/');
-    execSync(`libreoffice7.6 --version >> /tmp/version.txt`);
-    const version = readFileSync('/tmp/version.txt', { encoding: 'utf-8', flag: 'r' });
-    console.log("version :: ", version);
-    
+    // Convert the word to PDF 
     execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile} >> /tmp/conversion.txt`,{ encoding: 'utf-8'});
     readdirSync('/tmp/').forEach(file => {
         console.log("/tmp/ content after PDF ", file);
@@ -50,25 +43,12 @@ export const handler = async () => {
 
     const conversionTxt = readFileSync('/tmp/conversion.txt', { encoding: 'utf-8', flag: 'r' });
     console.log("conversion :: ", conversionTxt);
-    
-    let logs;
-    const LO_BINARY_PATH = 'libreoffice7.6';
-    const argumentsString = DEFAULT_ARGS.join(' ');
-    // const cmd = `cd /home/ && ${LO_BINARY_PATH} ${argumentsString} --convert-to pdf --outdir /home/ /home/test.docx`;
-    // due to an unknown issue, we need to run command twice
-    // try {
-    //     // let output = execSync(cmd).toString();
-    //     // console.log("output ", output);
-    //     const { stdout, stderr } = await exec(cmd);
-    //     console.log('stdout:', stdout);
-    //     console.error('stderr:', stderr);
-    // } catch (e) {
-    //     logs = await exec(cmd).stdout;
-    // }
 
+    // Derive PDF File Name 
     const pdfFile = inputFile?.split(".")[0] + ".pdf";
     console.log("pdfFile :: ", pdfFile);
 
+    // Write PDF file back to S3
     const fileContent = readFileSync(`/tmp/${pdfFile}`);
 
     const putObjectCommand = new PutObjectCommand({
@@ -84,18 +64,5 @@ export const handler = async () => {
         console.error("Error in putObject ", error);
     }
 
-    const ls = spawn('ls', ['-lh', '/var']);
-
-    ls.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-
-    ls.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
-    });
-
-    ls.on('exit', (code) => {
-        console.log(`child process exited with code ${code}`);
-    });
     console.log("Word to PDF Conversion Completed");
 }
