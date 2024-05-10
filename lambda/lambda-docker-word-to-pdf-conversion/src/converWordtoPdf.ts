@@ -36,7 +36,7 @@ export const handler = async () => {
     }
 
     // Convert the word to PDF 
-    execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile} >> /tmp/conversion.txt`,{ encoding: 'utf-8'});
+    execSync(`libreoffice7.6 --headless --convert-to pdf --outdir /tmp/ /tmp/${inputFile} >> /tmp/conversion.txt`, { encoding: 'utf-8' });
     readdirSync('/tmp/').forEach(file => {
         console.log("/tmp/ content after PDF ", file);
     });

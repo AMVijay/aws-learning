@@ -1,11 +1,10 @@
 {
-  "name": "lambda-docker-word-to-pdf-converstion",
+  "name": "lambda-docker-word-to-pdf-conversion",
   "version": "1.0.0",
-  "description": "Word to PDF Convertion",
+  "description": "Lambda Docker Word to PDF Conversion",
   "main": "index.js",
   "scripts": {
-    "build": "npx rimraf dist/ && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx rimraf dist/ && tsc"
   },
   "author": "Vijayaraaghavan Manoharan",
   "license": "ISC",

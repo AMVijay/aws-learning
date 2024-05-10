@@ -18,3 +18,7 @@ Using custom docker image.
 * Install Java `sudo yum install java-17-amazon-corretto-headless -y `
 * Set path `export PATH=$PATH:/opt/libreoffice7.6/program`
 * Now run `libreoffice7.6 --version`
+
+## Lambda Configuration
+* Increase lambda timeout as per execution need.
+* Increase memory as per execution need.
