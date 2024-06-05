@@ -3,6 +3,8 @@
 ## Solution Design
 ![](data-ingestion-dynamodb-opensearch.jpg)
 
+This is zero ETL solution provided by AWS and data ingestion happens near realtime from dynamodb to opensearch.
+
 ### Required Items  
 * OpenSearch Serverless Collection
 * DynamoDB Table
