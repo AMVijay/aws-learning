@@ -1,0 +1,60 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "allowRunExportJob",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:DescribeTable",
+                "dynamodb:DescribeContinuousBackups",
+                "dynamodb:ExportTableToPointInTime"
+            ],
+            "Resource": "arn:aws:dynamodb:<region>:<account number>:table/<table name>"
+        },
+        {
+            "Sid": "allowCheckExportjob",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:DescribeExport"
+            ],
+            "Resource": [
+                "arn:aws:dynamodb:<region>:<account number>:table/<table name>/export/*"
+            ]
+        },
+        {
+            "Sid": "allowReadFromStream",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator"
+            ],
+            "Resource": [
+                "arn:aws:dynamodb:<region>:<account number>:table/<table name>/stream/*"
+            ]
+        },
+        {
+            "Sid": "allowReadAndWriteToS3Export",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:AbortMultipartUpload",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<bucket name>/*"
+            ]
+        },
+        {
+            "Sid": "opensearchpermission",
+            "Effect": "Allow",
+            "Action": [
+                "aoss:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
