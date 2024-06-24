@@ -1,12 +1,12 @@
 # AppSync Private API
 
 ## Solution Design
-
+![](./private-appsync-api-solution-design.jpg)
 
 ## AppSync Private API configuration
 ![](private-api-appsync-config.jpg)
 ## VPC EndPoint Configuration Step
-
+![](./vpc-endpoint-for-appsync.jpeg)
 ## Test AppSync GraphQL from VPC environment
 
 Using CURL: 
