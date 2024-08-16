@@ -4,7 +4,7 @@
   "description": "Lambda Function to use AppSync with IAM authorization",
   "main": "index.js",
   "scripts": {
-    "execute": "npx rimraf dist/ lambda.zip && npx mkdirp dist && npx tsc && zip -rq lambda.zip ",
+    "build": "npx rimraf dist/ lambda.zip && npx mkdirp dist && npx tsc && zip -rq lambda.zip dist/ node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vijayaraaghavan Manoharan",
