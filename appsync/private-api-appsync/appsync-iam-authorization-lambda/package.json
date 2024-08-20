@@ -10,6 +10,7 @@
   "author": "Vijayaraaghavan Manoharan",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^22.4.1",
     "mkdirp": "^3.0.1",
     "rimraf": "^6.0.1",
     "typescript": "^5.5.4"
