@@ -12,20 +12,32 @@ const X_API_KEY: string = process.env.X_API_KEY as string;
 export const handler = async () => {
     console.log("Hello, World");
 
+    // const payload = {
+    //     "query": `{
+    //         getConfig(configName: "TEST"){
+    //             items{
+    //                 configName
+    //                 value
+    //             }
+    //         }
+    //     }`
+    // };
+
     const payload = {
-        "query": `{
-            getConfig(configName: "TEST"){
-                items{
-                    configName
-                    value
+        query: `
+            query ($input: String!){
+                getConfig(configName: $input){
+                    items{
+                        configName
+                        value
+                    }
                 }
             }
-        }`
-    }
+        `,
+        variables: { input: "TEST" }
+    };
 
-    console.log("Payload", JSON.stringify(payload));
-    console.log("X_API_KEY", X_API_KEY);
-
+    
     const apiUrl = new URL(ENDPOINT);
 
     const request = new HttpRequest({
@@ -35,7 +47,8 @@ export const handler = async () => {
         protocol: apiUrl.protocol,
         body: JSON.stringify(payload),
         headers: {
-            'Content-Type': 'application/graphql',
+            "Content-Type": "application/json",
+            Accept: "application/json",
             host: apiUrl.host,
             'x-appsync-domain': HOSTNAME,
         }
@@ -50,27 +63,8 @@ export const handler = async () => {
     await fetch(ENDPOINT, signedRequest)
         .then(response => response.json())
         .then(data => {
-            console.log('Here is the data: ', data);
+            console.log('Here is the data: ', JSON.stringify(data));
         });
-
-    // const request: RequestInit = {
-    //     method: 'POST',
-    //     body: JSON.stringify(payload),
-    //     headers: {
-    //         'Content-Type': 'application/graphql',
-    //         Host: HOSTNAME,
-    //         'x-appsync-domain': HOSTNAME,
-    //         "x-api-key": X_API_KEY
-    //     },
-    // }
-
-    // await fetch(ENDPOINT, request)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         console.log('AppSync response data: ', data);
-    //     });
-
-
 
     console.log("handler completed");
 }
