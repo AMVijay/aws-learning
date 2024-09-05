@@ -1,0 +1,26 @@
+provider:
+  name: aws
+  architecture: x86_64
+  runtime: nodejs20.x
+  versionFunctions: false
+  memorySize: 512
+  stage: dev
+  region: us-west-2
+  
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+          Resource: "arn:aws:logs:us-west-2:*:*"
+        - Effect: Allow
+          Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "arn:aws:logs:us-west-2:*:log-group:/aws/lambda/*:*"
+service: appsync-auth-poc
+functions:
+  appsync-auth-test:
+    handler: dist/index.handler
+    name: dev-auth-test
