@@ -21,6 +21,6 @@ provider:
           Resource: "arn:aws:logs:us-west-2:*:log-group:/aws/lambda/*:*"
 service: appsync-auth-poc
 functions:
-  appsync-auth-test:
+  lf-appsync-auth-test:
     handler: dist/index.handler
-    name: dev-auth-test
+    name: lf-appsync-auth-poc
