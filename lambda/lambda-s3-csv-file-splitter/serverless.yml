@@ -2,5 +2,10 @@ org: amvijay.com
 app: lambda-function-file-splitter
 service: file-splitter
 
-provider: 
+provider:
+  name: aws
+  stage: dev
+  region: us-west-2
+  ecr:
+    
   
