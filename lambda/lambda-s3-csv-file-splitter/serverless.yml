@@ -10,5 +10,10 @@ provider:
 
 package: 
   artifact: target/s3-large-file-splitter-1.0.0.jar
+
+functions:
+  file-splitter: 
+    handler: com.amvijay.aws_learning.lambda.s3_large_file_splitter.Handler
+    name: file-splitter
     
   
