@@ -6,6 +6,9 @@ provider:
   name: aws
   stage: dev
   region: us-west-2
-  ecr:
+  runtime: java17
+
+package: 
+  artifact: target/s3-large-file-splitter-1.0.0.jar
     
   
