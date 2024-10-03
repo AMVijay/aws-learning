@@ -1,5 +1,3 @@
-org: amvijay.com
-app: lambda-function-file-splitter
 service: file-splitter
 
 provider:
