@@ -20,5 +20,10 @@
             <artifactId>aws-lambda-java-events</artifactId>
             <version>3.14.0</version>
         </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.28.15</version>
+        </dependency>
     </dependencies>
 </project>
