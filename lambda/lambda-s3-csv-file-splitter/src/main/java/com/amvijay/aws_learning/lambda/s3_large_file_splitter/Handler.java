@@ -1,10 +1,14 @@
 package com.amvijay.aws_learning.lambda.s3_large_file_splitter;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.logging.LogLevel;
 
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -23,7 +27,18 @@ public class Handler implements RequestHandler<Map<String, String>, String> {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder().key("null").bucket("null").build();
         ResponseInputStream<GetObjectResponse> responseInputStream = s3Client.getObject(getObjectRequest);
 
-        responseInputStream.read(null)
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(responseInputStream)); 
+            int linesCount = 0;
+            while(bufferedReader.readLine() != null){
+                if(linesCount < 1000){
+                    lambdaLogger.log("line");
+                    linesCount++;
+                }
+            }
+        } catch (IOException e) {
+            lambdaLogger.log(e.getMessage(), LogLevel.ERROR);
+        }
         
 
         return "Hello, World";
