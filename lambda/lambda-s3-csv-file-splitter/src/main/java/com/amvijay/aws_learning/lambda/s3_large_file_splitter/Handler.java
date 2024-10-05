@@ -14,6 +14,7 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 public class Handler implements RequestHandler<Map<String, String>, String> {
 
@@ -38,7 +39,11 @@ public class Handler implements RequestHandler<Map<String, String>, String> {
                 if (linesCount < 1000) {
                     lambdaLogger.log("line");
                     linesCount++;
+                }else{
+                    linesCount = 0;
+                    PutObjectRequest.builder().bucket(bucketName).key("bucketName").build();
                 }
+                
             }
         } catch (IOException e) {
             lambdaLogger.log(e.getMessage(), LogLevel.ERROR);
