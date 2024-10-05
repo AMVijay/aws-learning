@@ -21,17 +21,21 @@ public class Handler implements RequestHandler<Map<String, String>, String> {
     public String handleRequest(Map<String, String> event, Context context) {
         LambdaLogger lambdaLogger = context.getLogger();
         lambdaLogger.log("Hello, World");
-
+        String bucketName = event.get("BUCKET_NAME");
+        lambdaLogger.log("BUCKET NAME " + bucketName);
+        String inputFileName = event.get("FILE_NAME");
+        lambdaLogger.log("File Name " + inputFileName);
+        
         S3Client s3Client = S3Client.builder().build();
 
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder().key("null").bucket("null").build();
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder().key(inputFileName).bucket(bucketName).build();
         ResponseInputStream<GetObjectResponse> responseInputStream = s3Client.getObject(getObjectRequest);
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(responseInputStream)); 
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(responseInputStream));
             int linesCount = 0;
-            while(bufferedReader.readLine() != null){
-                if(linesCount < 1000){
+            while (bufferedReader.readLine() != null) {
+                if (linesCount < 1000) {
                     lambdaLogger.log("line");
                     linesCount++;
                 }
@@ -39,7 +43,6 @@ public class Handler implements RequestHandler<Map<String, String>, String> {
         } catch (IOException e) {
             lambdaLogger.log(e.getMessage(), LogLevel.ERROR);
         }
-        
 
         return "Hello, World";
     }
