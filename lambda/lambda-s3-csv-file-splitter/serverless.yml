@@ -5,13 +5,19 @@ provider:
   stage: dev
   region: us-west-2
   runtime: java17
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "s3:GetObject"
+          Resource:
+            - "*"
 
-package: 
+package:
   artifact: target/s3-large-file-splitter-1.0.0.jar
 
 functions:
-  file-splitter: 
+  file-splitter:
     handler: com.amvijay.aws_learning.lambda.s3_large_file_splitter.Handler
     name: file-splitter
-    
-  

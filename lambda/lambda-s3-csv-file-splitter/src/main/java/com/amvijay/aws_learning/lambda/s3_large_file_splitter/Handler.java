@@ -35,9 +35,10 @@ public class Handler implements RequestHandler<Map<String, String>, String> {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(responseInputStream));
             int linesCount = 0;
-            while (bufferedReader.readLine() != null) {
+            String lineContent;
+            while ((lineContent = bufferedReader.readLine()) != null) {
                 if (linesCount < 1000) {
-                    lambdaLogger.log("line");
+                    lambdaLogger.log("Line :: " + lineContent);
                     linesCount++;
                 }else{
                     linesCount = 0;
