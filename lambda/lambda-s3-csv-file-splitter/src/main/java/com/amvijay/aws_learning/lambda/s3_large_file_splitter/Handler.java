@@ -11,6 +11,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.logging.LogLevel;
 
 import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
@@ -35,14 +36,22 @@ public class Handler implements RequestHandler<Map<String, String>, String> {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(responseInputStream));
             int linesCount = 0;
-            String lineContent;
-            while ((lineContent = bufferedReader.readLine()) != null) {
+            int splitCount = 1;
+            StringBuffer stringBuffer = new StringBuffer();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
                 if (linesCount < 1000) {
-                    lambdaLogger.log("Line :: " + lineContent);
+                    if(linesCount > 0){
+                        stringBuffer.append(System.lineSeparator());
+                    }
+                    stringBuffer.append(line);
                     linesCount++;
                 }else{
+                    lambdaLogger.log(stringBuffer.toString());
                     linesCount = 0;
-                    PutObjectRequest.builder().bucket(bucketName).key("bucketName").build();
+                    PutObjectRequest putObjectRequest = PutObjectRequest.builder().bucket(bucketName).key(splitCount++ +".csv").build();
+                    s3Client.putObject(putObjectRequest, RequestBody.fromString(stringBuffer.toString()));
+                    stringBuffer = new StringBuffer();
                 }
                 
             }
