@@ -38,5 +38,14 @@ Please execute this script from us-east-1 region.
 
 ## SNS Topics Tagging
 ```
-aws sns list-topics | jq -r '.Topics[] | "aws resourcegroupstaggingapi tag-resources --resource-arn-list "+.TopicArn+" --tags key1=value1,key2=value2' > sns-tags-script.sh
+aws sns list-topics | jq -r '.Topics[] | "aws resourcegroupstaggingapi tag-resources --resource-arn-list "+.TopicArn+" --tags key1=value1,key2=value2"' > sns-tags-script.sh
 ```
+
+## CloudFront
+* Cloudfront resource tagging need to be executed it from us-east-1 region.
+```
+aws cloudfront list-distributions | jq -r '.DistributionList.Items[] | "aws resourcegroupstaggingapi tag-resources --resource-arn-list "+.ARN+" --tags key1=value1,key2=value2"' > cloudfront-tags-script.sh
+```
+
+## SQS 
+aws sqs list-queues | jq -r '"aws sqs tag-queue --queue-url "+.QueueUrls[]+"' -tags key1=value1,key2=value2"' > sqs-tags-script.sh
