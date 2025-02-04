@@ -1,0 +1,6 @@
+{
+    "name": "Word to PDF Conversion",
+    "build": {
+        "dockerfile": "Dockerfile"
+    }
+}
